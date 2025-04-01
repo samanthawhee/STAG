@@ -24,7 +24,8 @@ public class OtherActionDoer{
         if(!this.checkSubjectsAvailable()){ return "The entities not all available"; }
 
         this.doConsume();
-        return this.checkPlayerAlive(this.doProduce());
+        this.doProduce();
+        return this.checkPlayerAlive(this.getNarration());
     }
 
     private void doConsume(){
@@ -39,18 +40,21 @@ public class OtherActionDoer{
         }
     }
 
-    private String doProduce(){
+    private void doProduce(){
         for(String currentProduce : this.getProduceList()){
             if(currentProduce.equals("health")){
-                return this.incrementHealth();
+                this.incrementHealth();
             }else if(this.checkIsLocation(currentProduce)){
-                return this.addPath(currentProduce);
+                this.addPath(currentProduce);
             }else{
                 this.produceEntity(currentProduce);
-                return this.getNarration();
+                this.getNarration();
             }
         }
-        return this.getNarration();
+    }
+
+    private String getNarration(){
+        return this.gameStateAccessor.getActionList().getGameAction(this.keyPhrase).getNarration();
     }
 
     private String checkPlayerAlive(String respond){
@@ -116,19 +120,15 @@ public class OtherActionDoer{
         GamePlayer player = this.gameStateAccessor.getPlayerList().getPlayer(playerName);
         if(player.getHealth() > 0){
             player.setHealth(player.getHealth() - 1);
-
         }
     }
-    private String incrementHealth(){
+    private void incrementHealth(){
         // Increment health by 1 if health is smaller than 3
-        StringBuilder respondBuilder = new StringBuilder();
         String playerName = this.commandChecker.getPlayerName();
         GamePlayer player = this.gameStateAccessor.getPlayerList().getPlayer(playerName);
         if(player.getHealth() > 0 && player.getHealth() < 3){
             player.setHealth(player.getHealth() + 1);
-            return respondBuilder.append("Your health is ").append(player.getHealth()).toString();
         }
-        return "Your health is 3";
     }
 
     private void removePath(String consumeLocation){
@@ -136,14 +136,10 @@ public class OtherActionDoer{
         this.gameStateAccessor.getPathList().removePath(currentLocation, consumeLocation);
     }
 
-    private String addPath(String produceLocation){
+    private void addPath(String produceLocation){
         // Add the path from current location to consumed location
-        StringBuilder respondBuilder = new StringBuilder("You ");
         String currentLocation = this.commandChecker.getPlayerLocation();
         this.gameStateAccessor.getPathList().addPath(currentLocation, produceLocation);
-        respondBuilder.append(this.commandChecker.getCommandSet()).append("and see steps leading down into a ");
-        respondBuilder.append(produceLocation);
-        return respondBuilder.toString();
     }
 
     private HashMap<String, String> getEntityAttributes(String entityName){
@@ -326,11 +322,4 @@ public class OtherActionDoer{
         HashSet<String> locationList = this.gameStateAccessor.getLocationList().getLocationsList();
         return locationList.contains(currentProduce);
     }
-
-    private String getNarration(){
-        return this.gameStateAccessor.getActionList().getGameAction(this.keyPhrase).getNarration();
-    }
-
-
-
 }

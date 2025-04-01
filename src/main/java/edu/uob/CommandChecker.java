@@ -17,11 +17,7 @@ public class CommandChecker {
     public CommandChecker(String command, GamePlayerCreator playerCreator, GameStateAccessor stateAccessor) {
         this.gameStateAccessor = stateAccessor;
         CommandParser commandParser = new CommandParser(command);
-        if(commandParser.parseCommand() != null) {
-            this.commandSet = commandParser.parseCommand();
-        }else{
-            this.commandSet = null;
-        }
+        this.commandSet = commandParser.parseCommand();
         this.playerName = playerCreator.getPlayerName();
         this.triggerList = new HashSet<>();
         this.entityList = new HashSet<>();

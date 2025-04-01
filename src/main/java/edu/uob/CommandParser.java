@@ -16,11 +16,8 @@ public class CommandParser {
     public HashSet<String> parseCommand() {
 
         this.getCommand();
-        if(this.getCommandSet()){
-            return this.commandSet;
-        }else{
-            return null;
-        }
+        this.getCommandSet();
+        return this.commandSet;
     }
 
     private void getCommand() {
@@ -30,8 +27,7 @@ public class CommandParser {
         this.pureCommand = db.substring(colonIndex + 1, stringLength).toLowerCase().trim();
     }
 
-    private boolean getCommandSet(){
-        int builtInActionAmount = 0;
+    private void getCommandSet(){
         StringBuilder commandContent =  new StringBuilder(this.pureCommand);
         StringBuilder currentWord = new StringBuilder();
 
@@ -47,26 +43,13 @@ public class CommandParser {
                 if(!currentWord.isEmpty()){
                     this.commandSet.add(currentWord.toString());
 
-                    if(currentWord.toString().equals("get")
-                            ||currentWord.toString().equals("drop")
-                            ||currentWord.toString().equals("look")
-                            ||currentWord.toString().equals("inv")
-                            ||currentWord.toString().equals("inventory")){
-                        builtInActionAmount++;
-                    }
-
                     currentWord.setLength(0);
                 }
             }
 
-            if(builtInActionAmount > 1){
-                return false;
-            }
         }
-
         if(!currentWord.isEmpty()){
             this.commandSet.add(currentWord.toString());
         }
-        return true;
     }
 }
