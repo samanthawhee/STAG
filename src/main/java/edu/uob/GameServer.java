@@ -18,8 +18,14 @@ public final class GameServer {
 
 
     public static void main(String[] args) throws IOException, ParserConfigurationException {
-        File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();
-        File actionsFile = Paths.get("config" + File.separator + "extended-actions.xml").toAbsolutePath().toFile();
+
+        StringBuilder dotFilePath = new StringBuilder("config");
+        dotFilePath.append(File.separator).append("extended-entities.dot");
+        StringBuilder xmlFilePath = new StringBuilder("config");
+        xmlFilePath.append(File.separator).append("extended-actions.xml");
+        File entitiesFile = Paths.get(dotFilePath.toString()).toAbsolutePath().toFile();
+        File actionsFile = Paths.get(xmlFilePath.toString()).toAbsolutePath().toFile();
+
         GameServer server = new GameServer(entitiesFile, actionsFile);
         server.blockingListenOn(8888);
     }
@@ -37,10 +43,6 @@ public final class GameServer {
         GameActionParser actionParser = new GameActionParser(actionsFile, this.gameStateAccessor);
         entityParser.parseEntitiesFile();
         actionParser.parseActionFile();
-        this.gameStateAccessor.getLocationList();
-        this.gameStateAccessor.getPlayerList();
-        this.gameStateAccessor.getActionList();
-        this.gameStateAccessor.getPathList();
     }
 
     /**
@@ -62,11 +64,13 @@ public final class GameServer {
     * @throws IOException If any IO related operation fails.
     */
     public void blockingListenOn(int portNumber) throws IOException {
+        StringBuilder portNumberString = new StringBuilder("Server listening on port ");
+        portNumberString.append(portNumber);
         try (ServerSocket s = new ServerSocket(portNumber)) {
-            System.out.println("Server listening on port " + portNumber);
+            System.out.println(portNumberString);
             while (!Thread.interrupted()) {
                 try {
-                    blockingHandleConnection(s);
+                    this.blockingHandleConnection(s);
                 } catch (IOException e) {
                     System.out.println("Connection closed");
                 }
@@ -88,10 +92,16 @@ public final class GameServer {
             System.out.println("Connection established");
             String incomingCommand = reader.readLine();
             if(incomingCommand != null) {
-                System.out.println("Received message from " + incomingCommand);
-                String result = handleCommand(incomingCommand);
-                writer.write(result);
-                writer.write("\n" + END_OF_TRANSMISSION + "\n");
+                StringBuilder outgoingCommand = new StringBuilder("Received message from ");
+                outgoingCommand.append(incomingCommand);
+                System.out.println(outgoingCommand);
+
+                StringBuilder result = new StringBuilder(handleCommand(incomingCommand));
+                writer.write(result.toString());
+
+                StringBuilder endOfTransmission = new StringBuilder();
+                endOfTransmission.append("\n").append(END_OF_TRANSMISSION).append("\n");
+                writer.write(endOfTransmission.toString());
                 writer.flush();
             }
         }
