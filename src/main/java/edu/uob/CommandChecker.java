@@ -46,7 +46,7 @@ public class CommandChecker {
             }else if(!this.entityList.isEmpty()){
                 return "Execute";
             }else{
-                return "Action not found";
+                return "Entity not found";
             }
         }
     }

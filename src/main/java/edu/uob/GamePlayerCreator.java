@@ -15,17 +15,12 @@ public class GamePlayerCreator {
         this.startLocation = this.gameStateAccessor.getLocationList().getStartLocation();
     }
 
-    public String createPlayer() {
+    public void createPlayer() {
         if(!this.checkHasPlayerExist()){
-            if(this.checkPlayerNameValid().isEmpty()){
-                GamePlayer newPlayer = new GamePlayer(this.getPlayerName(), this.startLocation);
-                this.gameStateAccessor.getPlayerList().addPlayers(newPlayer);
-                newPlayer.setLocation(this.startLocation);
-            }else{
-                return this.checkPlayerNameValid();
-            }
+            GamePlayer newPlayer = new GamePlayer(this.getPlayerName(), this.startLocation);
+            this.gameStateAccessor.getPlayerList().addPlayers(newPlayer);
+            newPlayer.setLocation(this.startLocation);
         }
-        return "";
     }
 
     public String getPlayerName(){
