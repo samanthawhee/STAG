@@ -1,7 +1,6 @@
 package edu.uob;
 
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
 import java.io.IOException;
 import java.io.File;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,7 +21,9 @@ final class ActionsFileTests {
   void testBasicActionsFileIsReadable() {
       try {
           DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-          Document document = builder.parse("config" + File.separator + "basic-actions.xml");
+          StringBuilder documentContent = new StringBuilder();
+          documentContent.append("config").append(File.separator).append("basic-actions.xml");
+          Document document = builder.parse(documentContent.toString());
           Element root = document.getDocumentElement();
           NodeList actions = root.getChildNodes();
           // Get the first action (only the odd items are actually actions - 1, 3, 5 etc.)
