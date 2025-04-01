@@ -56,7 +56,6 @@ class BuiltInActionTests {
       // First look after being in the game
       String response1 = sendCommandToServer("sam: look");
       response1 = response1.toLowerCase();
-      System.out.println(response1);
 
       assertTrue(response1.contains("cabin"), "Did not see the name of the current room in response to look");
       assertTrue(response1.contains("log cabin"), "Did not see a description of the room in response to look");
@@ -179,6 +178,12 @@ class BuiltInActionTests {
       String response6 = sendCommandToServer("sam: look");
       response6 = response6.toLowerCase();
       assertTrue(response6.contains("key"), "Failed attempt to use 'goto' command to move to the forest - there is no key in the current location");
+
+      // Go to more than 1 location and there is 1 which doesn't exist in the location list
+      sendCommandToServer("sam: goto forest and playground");
+      String response7 = sendCommandToServer("sam: look");
+      response7 = response7.toLowerCase();
+      assertTrue(response7.contains("key"), "Failed attempt to use 'goto' command to move to the forest - there is no key in the current location");
   }
 
   @Test
@@ -187,7 +192,6 @@ class BuiltInActionTests {
       sendCommandToServer("sam: get axe");
       String response1 = sendCommandToServer("sam: inv");
       response1 = response1.toLowerCase();
-      System.out.println(response1);
       assertTrue(response1.contains("coin"), "Failed to see existing entity in inv");
       assertTrue(response1.contains("axe"), "Failed to see existing entity in inv");
 
@@ -210,5 +214,48 @@ class BuiltInActionTests {
       String response4 = sendCommandToServer("sam: inv inventory");
       response4 = response4.toLowerCase();
       assertTrue(response4.contains("more than one action found"), "Failed to see error message after attempting to check inv with more than one action phrase");
+  }
+
+  @Test
+    void TestHealth(){
+      // Check health decrement 1 after being attacked
+      sendCommandToServer("sam: get coin");
+      sendCommandToServer("sam: get potion");
+      sendCommandToServer("sam: goto forest");
+      sendCommandToServer("sam: get key");
+      sendCommandToServer("sam: goto cabin");
+      sendCommandToServer("sam: open with key");
+      sendCommandToServer("sam: goto cellar");
+      sendCommandToServer("sam: attack elf");
+      String response1 = sendCommandToServer("sam: health");
+      assertTrue(response1.contains("2"), "Failed attempt to see correct health after attacking an elf");
+
+      // Check the reset message is sent after the player is dead
+      sendCommandToServer("sam: attack elf");
+      String response2 = sendCommandToServer("sam: attack elf");
+      assertTrue(response2.contains("died"), "Failed attempt to see correct health after the player died");
+
+      // Check health is 3 after the player is dead
+      String response3 = sendCommandToServer("sam: health");
+      assertTrue(response3.contains("3"), "Failed attempt to see correct health after the player died");
+
+      // Check the player is sent to the start location after the player is dead
+      String response4 = sendCommandToServer("sam: look");
+      assertTrue(response4.contains("cabin"), "Failed attempt to see correct start location after the player died");
+
+      // Check the entities is located in the location where the player died
+      sendCommandToServer("sam: goto cellar");
+      String response5 = sendCommandToServer("sam: look");
+      assertTrue(response5.contains("coin"), "Failed attempt to see the entities in the location after the player died");
+
+      // Check the inv is empty after the player died
+      String response6 = sendCommandToServer("sam: inv");
+      assertFalse(response6.contains("coin"), "Failed attempt to see that in player's inv after the player died");
+
+      //Check health increment 1 after being attacked
+      sendCommandToServer("sam: attack elf");
+      sendCommandToServer("sam: drink potion");
+      String response7 = sendCommandToServer("sam: health");
+      assertTrue(response7.contains("3"), "Failed attempt to see correct health after drinking potion");
   }
 }
