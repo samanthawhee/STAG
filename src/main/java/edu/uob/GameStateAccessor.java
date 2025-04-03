@@ -13,7 +13,6 @@ public class GameStateAccessor {
         this.actionList = new GameActionList();
     }
 
-
     public GameLocationList getLocationList() {return locationList;}
 
     public GamePathList getPathList() {return pathList;}

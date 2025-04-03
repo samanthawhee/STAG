@@ -32,10 +32,6 @@ public class GameActionList {
         this.gameActions.add(gameAction);
     }
 
-    public boolean hasGameAction(String gameAction) {
-        return this.gameActions.contains(gameAction);
-    }
-
     public void addKeyPhrase(String keyPhrase) {
         this.actionTriggerPhrases.add(keyPhrase);
     }

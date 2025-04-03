@@ -22,25 +22,17 @@ public class GameAction {
 
     public void addTrigger(String trigger) { this.triggers.add(trigger); }
 
-    public boolean hasTrigger(String trigger) { return this.triggers.contains(trigger); }
-
     public HashSet<String> getObjects() { return this.subjects; }
 
     public void addSubjects(String object) { this.subjects.add(object); }
-
-    public boolean hasObject(String object) { return this.subjects.contains(object); }
 
     public HashSet<String> getConsumed() { return this.consumed; }
 
     public void addConsumed(String consumed) { this.consumed.add(consumed); }
 
-    public boolean hasConsumed(String consumed) { return this.consumed.contains(consumed); }
-
     public HashSet<String> getProduced() { return this.produced; }
 
     public void addProduced(String produced) { this.produced.add(produced); }
-
-    public boolean hasProduced(String produced) { return this.produced.contains(produced); }
 
     public String getNarration() { return this.narration; }
 

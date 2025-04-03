@@ -297,12 +297,4 @@ public class CommandChecker {
     public String getPlayerName(){
         return this.playerName;
     }
-
-    public String getCommandSet(){
-        StringBuilder commandSet = new StringBuilder();
-        for (String command : this.commandSet) {
-            commandSet.append(command).append(" ");
-        }
-        return commandSet.toString();
-    }
 }

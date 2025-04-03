@@ -60,10 +60,6 @@ public class GameLocationList {
         this.gameLocations.put(locationName, locationObject);
     }
 
-    public boolean hasGameLocation(String locationName) {
-        return this.gameLocations.containsKey(locationName);
-    }
-
     public void addArtefact(String artefactName) {
         this.artefactsList.add(artefactName);
     }

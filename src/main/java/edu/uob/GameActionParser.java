@@ -42,8 +42,6 @@ public class GameActionParser {
         }
     }
 
-
-
     private void constructActions(Document document) {
         Element actions = document.getDocumentElement();
         NodeList actionList = actions.getElementsByTagName("action");

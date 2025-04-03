@@ -31,19 +31,4 @@ public class GamePlayerList {
     public void addPlayers(GamePlayer player) {
         this.players.add(player);
     }
-
-    public void removePlayers(String player) {
-        this.players.remove(player);
-    }
-
-    public boolean hasPlayer(String player) {
-        for (GamePlayer currentPlayer : this.players) {
-            if(currentPlayer.getName().equals(player)) {
-                return true;
-            }else{
-                return false;
-            }
-        }
-        return false;
-    }
 }

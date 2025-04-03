@@ -33,8 +33,4 @@ public class GamePathList {
             }
         }
     }
-
-    public boolean hasPath(String fromLoc, String desLoc) {
-        return this.path.containsKey(fromLoc) && this.path.get(fromLoc).contains(desLoc);
-    }
 }

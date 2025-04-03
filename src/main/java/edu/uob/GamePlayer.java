@@ -1,7 +1,6 @@
 package edu.uob;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 public class GamePlayer {
@@ -41,24 +40,16 @@ public class GamePlayer {
         return this.inventory;
     }
 
-    public boolean addInventory(String inventory) {
+    public void addInventory(String inventory) {
         if(!this.inventory.containsKey(inventory)) {
             this.inventory.put(inventory, new HashMap<String, String>());
-            return true;
-        }else {
-            return false;
         }
     }
 
-    public boolean addInventoryAttr(String inventory, String attrName, String attrValue) {
-        if(!this.inventory.containsKey(inventory)) {
-            return false;
-        }else {
+    public void addInventoryAttr(String inventory, String attrName, String attrValue) {
+        if(this.inventory.containsKey(inventory)) {
             if (!this.inventory.get(inventory).containsKey(attrName)) {
                 this.inventory.get(inventory).put(attrName, attrValue);
-                return true;
-            } else {
-                return false;
             }
         }
     }
